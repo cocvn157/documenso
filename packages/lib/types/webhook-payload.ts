@@ -14,6 +14,8 @@ import {
 } from '@prisma/client';
 import { z } from 'zod';
 
+import { DEFAULT_DOCUMENT_DATE_FORMAT } from '../constants/date-formats';
+import { DEFAULT_DOCUMENT_TIME_ZONE } from '../constants/time-zones';
 import { mapSecondaryIdToDocumentId, mapSecondaryIdToTemplateId } from '../utils/envelope';
 
 /**
@@ -158,9 +160,8 @@ export const mapEnvelopeToWebhookDocumentPayload = (
     documentMeta: documentMeta
       ? {
           ...documentMeta,
-          // Not sure why is optional in the prisma schema.
-          timezone: 'Etc/UTC',
-          dateFormat: 'yyyy-MM-dd hh:mm a',
+          timezone: documentMeta.timezone ?? DEFAULT_DOCUMENT_TIME_ZONE,
+          dateFormat: documentMeta.dateFormat ?? DEFAULT_DOCUMENT_DATE_FORMAT,
         }
       : null,
     Recipient: mappedRecipients,
